@@ -12,8 +12,6 @@ TOKEN="1546844166:AAHSTxTqdTX_ky1_dnVpiFYLNf682ZiWLk4"
 bot = telebot.TeleBot(TOKEN, parse_mode='HTML') # parse mode Html uchun ham o'tishi mumkin
 translator = Translator()
 
-
-
 #telegram keyboard uchun
 markup_inline=types.InlineKeyboardMarkup()
 item_uz=types.InlineKeyboardButton(text='Uzbekcha 🇺🇿',callback_data='uz')
@@ -40,20 +38,15 @@ def send_welcome(message):
     bot.reply_to(message, "Salom {}, Wikipedia_uz botiga xush kelibsiz! Iltimos o'z so'rovingizni jo'nating".format(name))
     bot.send_message(chat_id=admin_id,text='{} -botga kirdi!'.format(name))
     #reklama uchun funksiya 15 minut va 50 soatda jonatadi
-    while True:
-        time.sleep(600)
-        photo=open('botad.jpg', 'rb')
-        bot.send_photo(message.chat.id,photo=photo,)
-        time.sleep(180000)
-    bot.send_photo(chat_id=admin_id,photo=photo)
-
-#reklama jonatish funksiyasi    
-@bot.message_handler(commands=['/about'])
+    #bu funskiya xozir ishlamayapti 
+#reklama jonatish funksiyasi
+#     
+@bot.message_handler(commands=['about'])
 def send_about(message):
     bot.send_message(message.chat.id,'''
              Botimiz xaqida:
 Masalan:
-✅ Yangilangan sanasi- 2021/01/20
+✅ Yangilangan sanasi- 2021/01/27
 ✅ Dasturchi- @husanboy_us
 ✅ Xamkorlik uchun - @husanboy_us
              ''' )
