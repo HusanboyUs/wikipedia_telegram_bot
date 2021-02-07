@@ -16,9 +16,8 @@ translator = Translator()
 markup_inline=types.InlineKeyboardMarkup()
 item_uz=types.InlineKeyboardButton(text='Uzbekcha 🇺🇿',callback_data='uz')
 item_ru=types.InlineKeyboardButton(text='русский 🇷🇺',callback_data='ru')
-item_pic=types.InlineKeyboardButton(text='Rasm 🎇🎇', callback_data='Picture')
-item_report_problem=types.InlineKeyboardButton(text='❌Xatolik haqida malumot berish❌',callback_data='report_problem')
-markup_inline.add(item_uz,item_ru,item_pic,item_report_problem)
+item_report_problem=types.InlineKeyboardButton(text='❌Report❌',callback_data='report_problem')
+markup_inline.add(item_uz,item_ru,item_report_problem)
 
 #report problem uchun buttonlar
 markup_inline2=types.InlineKeyboardMarkup()
@@ -35,20 +34,24 @@ def send_welcome(message):
     name = message.from_user.first_name
     id=message.from_user.id
     print(name, id)
-    bot.reply_to(message, "Salom {}, Wikipedia_uz botiga xush kelibsiz! Iltimos o'z so'rovingizni jo'nating".format(name))
+    bot.reply_to(message, '''Salom {}, bizning wikipedia_uz botiga xush kelibsiz. 
+     Wikipedia so'rovlarini jo'natishingiz mumkin.
+     Masalan: Apple/Warsaw/Uzbekistan
+    '''.format(name))
     bot.send_message(chat_id=admin_id,text='{} -botga kirdi!'.format(name))
     #reklama uchun funksiya 15 minut va 50 soatda jonatadi
     #bu funskiya xozir ishlamayapti 
-#reklama jonatish funksiyasi
-#     
+    #reklama jonatish funksiyasi
+
 @bot.message_handler(commands=['about'])
 def send_about(message):
     bot.send_message(message.chat.id,'''
              Botimiz xaqida:
 Masalan:
-✅ Yangilangan sanasi- 2021/01/27
+✅ Yangilangan sanasi- 08/02/2021
 ✅ Dasturchi- @husanboy_us
 ✅ Xamkorlik uchun - @husanboy_us
+✅ Bizning kanalimiz https://t.me/artofitt
              ''' )
 
 #asosiy funksiya yoki funskiyalar
@@ -57,23 +60,18 @@ def main_func(message):
     global get_wiki
     try:
         msg=message.text
-        get_wiki=wikipedia.summary(msg,sentences=5)
+        get_wiki=wikipedia.summary(msg, sentences=7)
+        get_wiki_pics=wikipedia.page(msg).images[0]
         bot.send_message(message.chat.id,get_wiki,reply_markup=markup_inline )
-    except Exception as a :
-        bot.send_message(message.chat.id, text='{} demoqchi edingizmi? '.format(a))
+        bot.send_photo(message.chat.id, photo=get_wiki_pics)
+    except Exception  :
+        bot.send_message(message.chat.id, text="Nimadur xatolik yuz berdi. Aniq javob olshingiz uchun aniq so'rov kiriting 👇👇👇")
         bot.send_message(message.chat.id,'''
-             Iltimos aniq ma'lumot yozing!
+             So'rovni Ingliz Tilida yozishni yoki tekshirishni unutmang!
 Masalan:
-Trump-❌❌❌   Donald Trump-✅✅✅
-Mc-❌❌❌      MacDonalds-✅✅✅
-soat-❌❌❌    Qum Soat-✅✅✅
+Trump-❌❌❌ Donald Trump-✅✅✅
              ''' )
-        
-        
-#api limited sorry message
-msg_sorry='''
-       Xurmatli foydalanuvchi Xozirda biz 🎇🎇Zanserp API🎇🎇 dan foydalanmoqdamiz, bizda rasmlar olish soni cheklangan, tez orada buni to'g'irlaymiz!⚙️⚙️⚙️⚙️
-         '''
+                
 #function gets inline data and translates to the given languages
 @bot.callback_query_handler(func=lambda call: True)
 def query_text(call):
@@ -81,29 +79,12 @@ def query_text(call):
     global id
     if call.data=='uz':
         translation = translator.translate(get_wiki, dest='uz',)
-        bot.send_message(call.message.chat.id,translation)        
+        data_uz=translation.text
+        bot.send_message(call.message.chat.id, data_uz)        
     elif call.data=='ru':
         translation = translator.translate(get_wiki, dest='ru',)
-        bot.send_message(call.message.chat.id,translation)
-            
-    elif call.data=='Picture':
-        try:
-            headers = { 
-            "apikey": "9bb313a0-59d2-11eb-81a4-a1e58264054e"}
-
-            params = (
-                ("q",get_wiki),
-                ("tbm","isch"),
-                )
-
-            response = requests.get('https://app.zenserp.com/api/v2/search', headers=headers, params=params)
-            data=response.json()
-            first_image=data['image_results'][0]['thumbnail']
-            bot.send_photo(call.message.chat.id,photo=first_image)
-            bot.send_message(call.message.chat.id,text=msg_sorry)
-            
-        except:
-            bot.send_message(call.message.chat.id,text=msg_sorry)
+        data_ru=translation.text
+        bot.send_message(call.message.chat.id,data_ru)
     elif call.data=='report_problem':
         bot.send_message(call.message.chat.id, text='  🔻🔻🔻   Xato turini tanlang! 🔻🔻🔻   ',reply_markup=markup_inline2)
     elif call.data=='report1':
