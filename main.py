@@ -8,7 +8,7 @@ import requests
 #token va modullarni cahqirish
 admin_id='-1001261577807'
 apikey='-jgjTI4nQgb-UebbeCNF3unEFqaMyOAkDi_ZMBmlQIA'
-TOKEN="1546844166:AAHSTxTqdTX_ky1_dnVpiFYLNf682ZiWLk4"
+TOKEN="1546844166:AAF77WzEduNI6hIu-TgHkHYz8fBW-V83Vu8"
 bot = telebot.TeleBot(TOKEN, parse_mode='HTML') # parse mode Html uchun ham o'tishi mumkin
 translator = Translator()
 
