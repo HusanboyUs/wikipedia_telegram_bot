@@ -5,7 +5,7 @@ from googletrans import Translator
 import time
 import requests
 
-#token va modullarni cahqirish
+#token va modullarni cahqirish uchun
 admin_id='-1001261577807'
 apikey='-jgjTI4nQgb-UebbeCNF3unEFqaMyOAkDi_ZMBmlQIA'
 TOKEN="1546844166:AAF77WzEduNI6hIu-TgHkHYz8fBW-V83Vu8"
